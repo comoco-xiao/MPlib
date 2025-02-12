@@ -23,15 +23,28 @@ endif(CCACHE_FOUND)
 # Pinocchio uses its own FindCppAD, but does not provide it.
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules")
 
-find_package(Eigen3 3.4.0 REQUIRED)
-set(Boost_NO_WARN_NEW_VERSIONS 1)  # silence Boost CMake warnings
-find_package(Boost REQUIRED COMPONENTS system filesystem)
-find_package(ompl REQUIRED)
-find_package(fcl REQUIRED)
-find_package(pinocchio REQUIRED)
-find_package(assimp REQUIRED)
-find_package(orocos_kdl REQUIRED)
-find_package(urdfdom REQUIRED)
+macro(FetchContent_MakeAvailableExclude)
+    FetchContent_GetProperties(${ARGV})
+    if(NOT ${ARGV}_POPULATED)
+        FetchContent_Populate(${ARGV})
+        add_subdirectory(${${ARGV}_SOURCE_DIR} ${${ARGV}_BINARY_DIR} EXCLUDE_FROM_ALL)
+    endif()
+endmacro()
+
+list(PREPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
+include(eigen)
+
+# TODO xiao
+# find_package(Eigen3 3.4.0 REQUIRED)
+# set(Boost_NO_WARN_NEW_VERSIONS 1)  # silence Boost CMake warnings
+# find_package(Boost REQUIRED COMPONENTS system filesystem)
+# find_package(ompl REQUIRED)
+# find_package(fcl REQUIRED)
+# find_package(pinocchio REQUIRED)
+# find_package(assimp REQUIRED)
+# find_package(orocos_kdl REQUIRED)
+# find_package(urdfdom REQUIRED)
 
 # store libries in a variable
 set(LIBS ompl fcl assimp orocos-kdl Boost::system Boost::filesystem urdfdom_model urdfdom_world)
