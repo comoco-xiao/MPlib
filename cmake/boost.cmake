@@ -1,3 +1,5 @@
+set(Boost_USE_STATIC_LIBS ON CACHE BOOL "" FORCE)
+
 include(FetchContent)
 
 FetchContent_Declare(
